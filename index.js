@@ -25,17 +25,18 @@ document.addEventListener('DOMContentLoaded', function () {
     // Enter-Taste
     else if (event.keyCode === 13) {
       redirectToNextWindow();
-      playSound("./sound/confirm_select.mp3"); // Spielt den Ton ab
 
     }
 
     // Fügt die aktive Klasse zum ausgewählten Punkt hinzu
     menuItems[currentIndex].classList.add('active');
-    //playSound("./sound/menu_select.mp3"); // Spielt den Ton ab
 
   });
 
   function playSound(sound = "") {
+    /**
+     * This method plays sounds from the soundfolder
+     */
     // Audiowiedergabelogik hier einfügen
     // Erstellen Sie ein Audio-Element und spielen Sie den Ton ab
     // Beispiel: var audio = new Audio('sound.mp3');
@@ -46,15 +47,19 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function createMenuItems() {
+    /**
+     * This methode creates the menulist
+     */
     var menu = document.createElement('ul');
     menu.id = 'menu';
 
-    var menuOptions = ['Start Game', 'Story-Mode', 'Settings'];
+    var menuOptions = [['Start Game', '/start'], ['Story-Mode', '/story'], ['Settings', '/settings']];
 
     for (var i = 0; i < menuOptions.length; i++) {
       var menuItem = document.createElement('li');
-      menuItem.textContent = menuOptions[i];
-      menuItem.id = menuOptions[i].toLowerCase();
+      menuItem.setAttribute('onclick', `redirectToNextWindow(${menuOptions[i][1]})`);
+      menuItem.textContent = menuOptions[i][0];
+      menuItem.id = menuOptions[i][0].toLowerCase();
 
       menu.appendChild(menuItem);
     }
@@ -64,63 +69,11 @@ document.addEventListener('DOMContentLoaded', function () {
     return document.querySelectorAll('#menu li');
   }
 
-  function redirectToNextWindow() {
-    var selectedItem = menuItems[currentIndex].id;
-
-    // Weiterleitungslogik basierend auf dem ausgewählten Punkt
-    if (selectedItem === 'Start Game') {
-      return window.location.href = 'start.html'; // Hier wird zu "start.html" weitergeleitet
-    } else if (selectedItem === 'Settings') {
-      return window.location.href = 'settings.html'; // Hier wird zu "settings.html" weitergeleitet
-    } else if (selectedItem === 'Story-Mode') {
-      return window.location.href = 'story.html'; // Hier wird zu "story.html" weitergeleitet
-    }
-    result = selectedItem
-    return result;
+  function redirectToNextWindow(link) {
+    /**
+     * This method redirects to the next screen
+     */
+    playSound("./sound/confirm_select.mp3"); // Spielt den Ton ab
+    window.location.href(link);
   }
-  // function createScreen() {
-  //   // Body erstellen und stylen
-  // var body = document.body.style;
-  // body.fontFamily = '"VT323", monospace';
-  // body.backgroundColor = "#ed3318";
-
-  // // Liste (ul) erstellen und stylen
-  // var ul = document.createElement("ul");
-  // ul.style.textAlign = "center";
-  // ul.style.position = "absolute";
-  // ul.style.left = "50%";
-  // ul.style.top = "50%";
-  // ul.style.transform = "translate(-50%, -50%)";
-  // ul.style.width = "35rem";
-  // ul.style.listStyle = "none";
-  // ul.id = "menu";
-  // //body.appendChild(ul);
-
-  // // Listenpunkt (li) erstellen und stylen
-  // var li = document.createElement("li");
-  // li.style.fontSize = "30px";
-  // ul.appendChild(li);
-  // document.body.appendChild(ul);
-
-
-  // // H1 erstellen und stylen
-  // var h1 = document.createElement("h1");
-  // h1.style.textAlign = "center";
-  // //body.appendChild(h1);
-  // document.body.appendChild(h1);
-
-
-  // // Aktives Element erstellen und stylen
-  // var activeElement = document.createElement("div");
-  // activeElement.style.width = "35rem";
-  // activeElement.style.backgroundColor = "white";
-  // activeElement.style.border = "2px solid black";
-  // activeElement.style.boxShadow = "-5px 5px 0px black";
-  //  //body.appendChild(activeElement);
-  // document.body.appendChild(activeElement);
-
-
-
-  // }
-
 });
