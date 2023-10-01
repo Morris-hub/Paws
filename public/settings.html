@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+
+    <style>
+        :root {
+            --main: #ed3318;
+            --light: white;
+            --shadow: black;
+            --font: "VT323", monospace;
+            --font-size: 3vh;
+        }
+
+        body {
+            font-family: var(--font);
+            background-color: var(--main);
+        }
+
+        li {
+            font-size: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 10vh;
+
+        }
+
+        #display-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: right;
+            background-color: whitesmoke;
+            width: 30vh;
+            height: 40vh;
+            right: auto;
+        }
+
+        select {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: -5px 5px 0px var(--shadow);
+            margin-top: 1vh;
+            width: 30vh;
+            height: 5vh;
+            font-family: var(--font);
+            font-size: 2.5vh;
+        }
+
+        button {
+            font-family: var(--font);
+            background-color: var(--light);
+            box-shadow: -5px 5px 0px var(--shadow);
+            border: 2px solid var(--shadow);
+            border-radius: 100%;
+            font-size: var(--font-size);
+            height: 5vh;
+            width: 5vh;
+            margin: 1vh;
+        }
+
+        button:hover {
+            background-color: var(--shadow);
+            color: var(--light);
+        }
+
+        .active {
+            width: 35rem;
+            background-color: white;
+            border: 2px solid black;
+            box-shadow: -5px 5px 0px black;
+        }
+
+        #menu-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Choose your Settings</h1>
+
+    <div>
+
+    </div id="content">
+    <div id="menu-box">
+        <select name="pray" id="pray">
+            <option value="flies">Flies</option>
+            <option value="laserpointer">Laserpointer</option>
+            <option value="mouse">Mouse</option>
+        </select>
+        <select name="cat" id="cat">
+            <option value="elgato">El Gato</option>
+            <option value="neko">Neko</option>
+            <option value="senior-pink">Senor Pink</option>
+        </select>
+        <button>sound</button>
+    </div>
+    <div id="display-box"></div>
+    </div>
+
+    <script src="./settings.js"></script>
+
+</body>
+
+</html>

@@ -1,10 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', function () {
-  var currentIndex = 0;
-  var menuItems = createMenuItems(); // Menüpunkte programmgesteuert erstellen
 
-  // Fügt die aktive Klasse zum Startpunkt hinzu
-  menuItems[currentIndex].classList.add('active');
 
   document.addEventListener('keydown', function (event) {
     // Entfernt die aktive Klasse von dem aktuellen Punkt
@@ -46,28 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
     audio.play();
   }
 
-  function createMenuItems() {
-    /**
-     * This methode creates the menulist
-     */
-    var menu = document.createElement('ul');
-    menu.id = 'menu';
-
-    var menuOptions = [['Start Game', '/start'], ['Story-Mode', '/story'], ['Settings', '/settings']];
-
-    for (var i = 0; i < menuOptions.length; i++) {
-      var menuItem = document.createElement('li');
-      menuItem.setAttribute('onclick', `redirectToNextWindow(${menuOptions[i][1]})`);
-      menuItem.textContent = menuOptions[i][0];
-      menuItem.id = menuOptions[i][0].toLowerCase();
-
-      menu.appendChild(menuItem);
-    }
-
-    document.body.appendChild(menu);
-
-    return document.querySelectorAll('#menu li');
-  }
 
   function redirectToNextWindow(link) {
     /**
