@@ -1,11 +1,46 @@
+
 let points = 0;
+let catArmPositionX = -100;
+let currentSecond = 0;
+let mouseX = 0;
+
+
+
+function createCatArm() {
+    const clickX = event.clientX - 10;
+    const clickY = event.clientY - 10;
+
+    const catArm = document.createElement("div");
+    catArm.style.width = "155px";
+    catArm.style.height = "880px";
+    catArm.id = "catArm";
+    catArm.style.backgroundImage = "url('images/catPawSpotMini.png')";
+    catArm.style.display = "block";
+    catArm.style.position = "absolute";
+    catArm.style.left = clickX + "px";
+    catArm.style.top = clickY + "px";
+    catArm.style.bottom = "0";
+
+    document.body.appendChild(catArm);
+
+    // Rufe die hideCatArm-Funktion nach 2 Sekunden auf
+    setTimeout(function () {
+        hideCatArm(catArm);
+    }, 700);
+}
+
+function hideCatArm(catArm) {
+    catArm.style.display = "none";
+}
+
+
 
 function displayPoints(points) {
 
     const displayPoints = document.createElement('div');
     displayPoints.id = 'points';
     displayPoints.style.width = '10vh';
-    displayPoints.style.height = '5vh';
+    displayPoints.style.height = '8vh';
     displayPoints.style.backgroundColor = 'red';
     displayPoints.style.display = 'block';
     displayPoints.style.position = 'absolute';
@@ -19,20 +54,16 @@ function displayPoints(points) {
     document.body.appendChild(displayPoints);
 
 
-    console.log(points);
+    //console.log(points);
 }
-
-function displayHP(hp) {
-    const pointsSpan = document.getElementById('HP');
-    pointsSpan.textContent = hp;
-}
-
 function createFly() {
     const Fly = document.createElement('div');
     Fly.id = 'shitFly';
     Fly.style.width = '30px';
     Fly.style.height = '30px';
+    Fly.style.borderRadius = '50%';
     Fly.style.backgroundColor = 'red';
+    Fly.style.zIndex = '0';
     Fly.style.display = 'block';
     Fly.style.transition = 'all 1.5s ease-in-out';
     Fly.style.position = 'absolute';
@@ -41,10 +72,10 @@ function createFly() {
     document.body.appendChild(Fly);
 
     Fly.addEventListener('click', function () {
-        playFlySound(); //Death sound
+        playFlySound();
         Fly.remove();
-        points++; // Erhöhe die Punktzahl beim Entfernen der Fliege
-        displayPoints(points); // Aktualisiere die Anzeige der Punktzahl
+        points++;
+        displayPoints(points);
         createFly();
     });
 
@@ -54,8 +85,8 @@ function createFly() {
 
 function moveFly() {
     const Fly = document.getElementById('shitFly');
-    const maxWidth = window.innerWidth - 100; // Subtract 100 to keep the square within the viewport.
-    const maxHeight = window.innerHeight - 100; // Subtract 100 to keep the square within the viewport.
+    const maxWidth = window.innerWidth - 100;
+    const maxHeight = window.innerHeight - 100;
     const newLeft = Math.floor(Math.random() * maxWidth) + 'px';
     const newTop = Math.floor(Math.random() * maxHeight) + 'px';
 
@@ -63,41 +94,21 @@ function moveFly() {
     Fly.style.top = newTop;
 
     const elementToChangeCursor = document.body;
-
     elementToChangeCursor.style.cursor = "pointer";
 }
 
-// Function to track mouse movement and update Fly position.
-function movePlayer(event) {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
 
-}
 
-function cursor() {
-    // Holen Sie sich das HTML-Element, auf dem Sie den Cursor ändern möchten, z.B. den Body
-    const elementToChangeCursor = document.body;
-
-    // Ändern Sie den Cursor auf "pointer" (Handzeiger) beim Überfahren des Elements
-    elementToChangeCursor.style.cursor = "pointer";
-
-}
-// Function to play the sound when the Fly is removed.
 function playFlySound() {
     const flySound = document.getElementById('flySound');
     if (flySound) {
-        flySound.currentTime = 0; // Rewind the sound to the beginning.
-        flySound.playbackRate = 2.0; // Set the playback rate to 2x (twice as fast).
-        flySound.play(); // Play the sound.
+        flySound.currentTime = 0;
+        flySound.playbackRate = 2.0;
+        flySound.play();
     }
 }
 
-//Timer
 
-// Aktuelle Sekunde
-let currentSecond = 0;
-
-// Funktion, um den Timer anzuzeigen
 function displayTimer() {
     const timerDisplay = document.createElement('div');
     timerDisplay.textContent = currentSecond;
@@ -114,63 +125,52 @@ function displayTimer() {
     document.body.appendChild(timerDisplay);
 }
 
-function cursor() {
-    const cursor = document.createElement('div')
+
+
+function createpawPrint() {
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+
+    const pawPrint = document.createElement('div');
+    pawPrint.style.width = '120px';
+    pawPrint.style.height = '80px';
+    pawPrint.style.position = 'absolute';
+    pawPrint.style.backgroundSize = 'cover';
+    pawPrint.style.backgroundImage = "url('images/pawPrint.png')";
+    pawPrint.style.left = mouseX + 'px';
+    pawPrint.style.top = mouseY + 'px';
+
+    document.body.appendChild(pawPrint);
 }
 
-function cat() {
-    const cat = document.createElement('div');
-    cat.style.width = '10vh';
-    cat.style.height = '6vh';
-    cat.style.backgroundColor = 'red';
-    cat.style.color = 'white';
-    cat.style.textAlign = 'center';
-    cat.style.margin = '0';
-    cat.style.bottom = '1vh';
-    cat.style.position = 'absolute';
-    cat.style.right = '1vh';
-    document.body.appendChild(cat);
-}
-// Starten Sie den Timer und aktualisieren Sie ihn alle 1000 Millisekunden (1 Sekunde)
 const timerInterval = setInterval(() => {
     currentSecond++;
     displayTimer();
 
-    // Wenn die Ziel-Sekunde erreicht wurde, beenden Sie den Timer
-    if (currentSecond === 30) {
+    if (currentSecond === 5) {
         clearInterval(timerInterval);
-        alert('Timer abgelaufen!'); // Hier können Sie eine beliebige Aktion ausführen, wenn der Timer abgelaufen ist.
+        let arm = document.getElementById('catArm');
+        arm.style.backgroundColor = 'green';
+        // alert('Timer abgelaufen!'); 
     }
 }, 1000);
 
-
-// Event-Listener hinzufügen, um auf Mausklicks zu reagieren
 document.addEventListener("click", function (event) {
-    // Mausposition ermitteln
+    createpawPrint();
+    createCatArm();
+
     const mouseX = event.clientX;
     const mouseY = event.clientY;
+    console.log(mouseX, mouseY);
 
-    // Neues <div>-Element erstellen
-    const newDiv = document.createElement('div');
-    newDiv.style.width = '120px'; // Breite des <div>-Elements anpassen
-    newDiv.style.height = '80px'; // Höhe des <div>-Elements anpassen
-    newDiv.style.position = 'absolute';
-    newDiv.style.backgroundSize = 'cover';
-    newDiv.style.backgroundImage = "url('images/pawPrint.png')";
-    newDiv.style.left = mouseX + 'px'; // Position horizontal einstellen
-    newDiv.style.top = mouseY + 'px'; // Position vertikal einstellen
-
-    // Das <div>-Element dem Body der Seite hinzufügen
-    document.body.appendChild(newDiv);
 });
 
 
-// Initialanzeige des Timers
-displayTimer();
-createFly();
-cat();
+
+
+//displayTimer();
+createFly(); //creates the first Fly
 setInterval(moveFly, 2000);
 displayPoints();
 
-// Add a mousemove event listener to the document to track mouse movement.
-document.addEventListener('mousemove', movePlayer);
