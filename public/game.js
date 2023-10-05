@@ -7,8 +7,8 @@ let mouseX = 0;
 
 
 function createCatArm() {
-    const clickX = event.clientX - 10;
-    const clickY = event.clientY - 10;
+    const clickX = event.clientX - 80;
+    const clickY = event.clientY - 50;
 
     const catArm = document.createElement("div");
     catArm.style.width = "155px";
@@ -129,7 +129,7 @@ function displayTimer() {
 
 
 function createpawPrint() {
-    const mouseX = event.clientX;
+    const mouseX = event.clientX - 60;
     const mouseY = event.clientY;
 
 
