@@ -17,6 +17,7 @@ function createCatArm() {
     catArm.style.backgroundImage = "url('images/catPawSpotMini.png')";
     catArm.style.display = "block";
     catArm.style.position = "absolute";
+    catArm.style.zIndex = "3";
     catArm.style.left = clickX + "px";
     catArm.style.top = clickY + "px";
     catArm.style.bottom = "0";
@@ -63,7 +64,7 @@ function createFly() {
     Fly.style.height = '30px';
     Fly.style.borderRadius = '50%';
     Fly.style.backgroundColor = 'red';
-    Fly.style.zIndex = '0';
+    Fly.style.zIndex = '1';
     Fly.style.display = 'block';
     Fly.style.transition = 'all 1.5s ease-in-out';
     Fly.style.position = 'absolute';
@@ -136,6 +137,7 @@ function createpawPrint() {
     pawPrint.style.width = '120px';
     pawPrint.style.height = '80px';
     pawPrint.style.position = 'absolute';
+    pawPrint.style.zIndex = '0';
     pawPrint.style.backgroundSize = 'cover';
     pawPrint.style.backgroundImage = "url('images/pawPrint.png')";
     pawPrint.style.left = mouseX + 'px';
