@@ -2,13 +2,13 @@
 <html>
 
 <head>
-  <title>Gaming Startbildschirm</title>
+  <title>Start Screen</title>
   <script src="index.js"></script>
 
   <link href="https://fonts.googleapis.com/css?family=VT323&display=swap" />
   <style>
     :root {
-      --main: #ed3318;
+      --main: beige;
       --light: white;
       --shadow: black;
       --font: "VT323", monospace;
@@ -36,9 +36,15 @@
       box-shadow: -5px 5px 0px var(--shadow);
       border: 2px solid var(--shadow);
       font-size: var(--font-size);
+      border-radius: 25px;
       height: 5vh;
       width: 50vh;
       margin: 1vh;
+    }
+
+    button:hover {
+      background-color: var(--shadow);
+      color: var(--light);
     }
 
     #menu {

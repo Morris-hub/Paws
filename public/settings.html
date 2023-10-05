@@ -8,7 +8,7 @@
 
     <style>
         :root {
-            --main: #ed3318;
+            --main: pink;
             --light: white;
             --shadow: black;
             --font: "VT323", monospace;
@@ -30,6 +30,18 @@
 
         }
 
+        #menu-box {
+            display: flex;
+            flex-direction: column;
+            width: 500px;
+            height: 750px;
+            border-radius: 25px;
+            border: 2px solid black;
+            box-shadow: -5px 5px 0px var(--shadow);
+            background-color: pink;
+            margin-left: 5vh;
+        }
+
         #display-box {
             display: flex;
             flex-direction: column;
@@ -48,7 +60,7 @@
             text-align: center;
             box-shadow: -5px 5px 0px var(--shadow);
             margin-top: 1vh;
-            width: 30vh;
+            width: 40vh;
             height: 5vh;
             font-family: var(--font);
             font-size: 2.5vh;
@@ -105,7 +117,8 @@
         </select>
         <button>sound</button>
     </div>
-    <div id="display-box"></div>
+
+    <!-- <div id="display-box"></div> -->
     </div>
 
     <script src="./settings.js"></script>

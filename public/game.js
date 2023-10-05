@@ -27,7 +27,7 @@ function createCatArm() {
     // Rufe die hideCatArm-Funktion nach 2 Sekunden auf
     setTimeout(function () {
         hideCatArm(catArm);
-    }, 700);
+    }, 600);
 }
 
 function hideCatArm(catArm) {
@@ -42,7 +42,8 @@ function displayPoints(points) {
     displayPoints.id = 'points';
     displayPoints.style.width = '10vh';
     displayPoints.style.height = '8vh';
-    displayPoints.style.backgroundColor = 'red';
+    displayPoints.style.backgroundColor = 'pink';
+    displayPoints.style.borderRadius = '15px';
     displayPoints.style.display = 'block';
     displayPoints.style.position = 'absolute';
     displayPoints.style.right = '1vh';
@@ -115,7 +116,8 @@ function displayTimer() {
     timerDisplay.textContent = currentSecond;
     timerDisplay.style.width = '10vh';
     timerDisplay.style.height = '6vh';
-    timerDisplay.style.backgroundColor = 'red';
+    timerDisplay.style.backgroundColor = 'pink';
+    timerDisplay.style.borderRadius = '15px';
     timerDisplay.style.fontSize = '5vh';
     timerDisplay.style.color = 'white';
     timerDisplay.style.textAlign = 'center';
