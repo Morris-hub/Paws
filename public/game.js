@@ -7,14 +7,17 @@ let mouseX = 0;
 
 
 function createCatArm() {
+
     const clickX = event.clientX - 80;
     const clickY = event.clientY - 50;
 
     const catArm = document.createElement("div");
-    catArm.style.width = "155px";
-    catArm.style.height = "880px";
+    catArm.style.width = "160px";
+    catArm.style.height = "890px";
     catArm.id = "catArm";
     catArm.style.backgroundImage = "url('images/catPawSpotMini.png')";
+    catArm.style.backgroundSize = "cover";
+    catArm.style.backgroundRepeat = "no-repeat";
     catArm.style.display = "block";
     catArm.style.position = "absolute";
     catArm.style.zIndex = "3";
@@ -34,36 +37,58 @@ function hideCatArm(catArm) {
     catArm.style.display = "none";
 }
 
+function displayHealthPoints() {
 
+    const displayPoints = document.createElement('div');
+    displayPoints.id = 'points';
+    displayPoints.style.width = '15vh';
+    displayPoints.style.height = '6vh';;
+    displayPoints.style.backgroundColor = 'beige';
+    displayPoints.style.boxShadow = ' -5px 5px 0px black';
+    displayPoints.style.borderRadius = '15px';
+    displayPoints.style.display = 'block';
+    displayPoints.style.fontFamily = 'Monospace'
+    displayPoints.style.position = 'absolute';
+    displayPoints.style.right = '1vh';
+    displayPoints.textContent = "HP:3";
+    displayPoints.style.fontSize = '45px';
+    displayPoints.style.color = 'black';
+    displayPoints.style.textAlign = 'center';
+    displayPoints.style.top = '10vh';
+    document.body.appendChild(displayPoints);
+}
 
 function displayPoints(points) {
 
     const displayPoints = document.createElement('div');
     displayPoints.id = 'points';
     displayPoints.style.width = '10vh';
-    displayPoints.style.height = '8vh';
-    displayPoints.style.backgroundColor = 'pink';
+    displayPoints.style.height = '6vh';;
+    displayPoints.style.backgroundColor = 'beige';
+    displayPoints.style.boxShadow = ' -5px 5px 0px black';
     displayPoints.style.borderRadius = '15px';
     displayPoints.style.display = 'block';
+    displayPoints.style.fontFamily = 'Monospace'
     displayPoints.style.position = 'absolute';
     displayPoints.style.right = '1vh';
     displayPoints.textContent = points;
     displayPoints.style.fontSize = '45px';
-    displayPoints.style.color = 'white';
+    displayPoints.style.color = 'black';
     displayPoints.style.textAlign = 'center';
     displayPoints.style.margin = '0';
     displayPoints.style.top = '1vh';
     document.body.appendChild(displayPoints);
 
-
-    //console.log(points);
 }
+
+
 function createFly() {
     const Fly = document.createElement('div');
     Fly.id = 'shitFly';
-    Fly.style.width = '30px';
-    Fly.style.height = '30px';
+    Fly.style.width = '60px';
+    Fly.style.height = '60px';
     Fly.style.borderRadius = '50%';
+    Fly.style.filter = 'blur(2px)'
     Fly.style.backgroundColor = 'red';
     Fly.style.zIndex = '1';
     Fly.style.display = 'block';
@@ -85,6 +110,46 @@ function createFly() {
 
 }
 
+
+function createGround() {
+    const Ground = document.createElement('div');
+    Ground.id = 'Ground';
+    Ground.style.width = '100%';
+    Ground.style.height = '1vw';
+    Ground.style.backgroundColor = 'red';
+    Ground.style.zIndex = '1';
+    Ground.style.display = 'block';
+    Ground.style.position = 'absolute';
+    Ground.style.left = '0px';
+    Ground.style.bottom = '0px';
+    document.body.appendChild(Ground);
+}
+
+
+function finishScreen() {
+    const finishScreen = document.createElement('div');
+    finishScreen.style.width = '100%';
+    finishScreen.style.height = '100%';
+    finishScreen.style.backgroundColor = 'black';
+    finishScreen.style.opacity = 'blur(8px)';
+    finishScreen.style.zIndex = '10';
+    document.body.appendChild(finishScreen);
+}
+
+function moveBooster() {
+    const Fly = document.getElementById('booster');
+    const maxWidth = window.innerWidth - 100;
+    const maxHeight = window.innerHeight - 100;
+    const newLeft = Math.floor(Math.random() * maxWidth) + 'px';
+    const newTop = Math.floor(Math.random() * maxHeight) + 'px';
+
+    Fly.style.left = newLeft;
+    Fly.style.top = newTop;
+
+    const elementToChangeCursor = document.body;
+    elementToChangeCursor.style.cursor = "pointer";
+}
+
 function moveFly() {
     const Fly = document.getElementById('shitFly');
     const maxWidth = window.innerWidth - 100;
@@ -99,6 +164,38 @@ function moveFly() {
     elementToChangeCursor.style.cursor = "pointer";
 }
 
+function moveKonpeito() {
+    const Konpeito = document.getElementById('konpeito');
+    const maxWidth = window.innerWidth - 100;
+    const newLeft = Math.floor(Math.random() * maxWidth) + 'px';
+    const newTop = '-100px'; // Startposition oberhalb des Bildschirms
+
+    Konpeito.style.left = newLeft;
+    Konpeito.style.top = newTop;
+
+    const animationDuration = 2000; // Dauer der Animation in Millisekunden
+    const animationFrames = 180; // Anzahl der Animationsschritte
+    const stepX = (parseInt(newLeft) - parseInt(Konpeito.style.left)) / animationFrames;
+    const stepY = (window.innerHeight + 100) / animationFrames; // Y-Schritt für das Herunterfallen
+
+    let frameCount = 0;
+    const animate = () => {
+        frameCount++;
+        Konpeito.style.left = (parseInt(Konpeito.style.left) + stepX) + 'px';
+        Konpeito.style.top = (parseInt(Konpeito.style.top) + stepY) + 'px';
+
+        if (frameCount < animationFrames) {
+            requestAnimationFrame(animate);
+        }
+    };
+    Konpeito.addEventListener('click', function () {
+        playFlySound();
+        Konpeito.remove();
+        points--;
+        createKonpeito();
+    });
+    animate();
+}
 
 
 function playFlySound() {
@@ -116,11 +213,13 @@ function displayTimer() {
     timerDisplay.textContent = currentSecond;
     timerDisplay.style.width = '10vh';
     timerDisplay.style.height = '6vh';
-    timerDisplay.style.backgroundColor = 'pink';
+    timerDisplay.style.backgroundColor = 'beige';
     timerDisplay.style.borderRadius = '15px';
+    timerDisplay.style.fontFamily = 'Monospace'
     timerDisplay.style.fontSize = '5vh';
-    timerDisplay.style.color = 'white';
+    timerDisplay.style.color = 'black';
     timerDisplay.style.textAlign = 'center';
+    timerDisplay.style.boxShadow = "-5px 5px 0px black";
     timerDisplay.style.margin = '0';
     timerDisplay.style.top = '1vh';
     timerDisplay.style.position = 'absolute';
@@ -128,7 +227,48 @@ function displayTimer() {
     document.body.appendChild(timerDisplay);
 }
 
+function createBooster() {
+    const booster = document.createElement('div');
+    booster.id = 'booster';
+    booster.style.width = '100px';
+    booster.style.height = '100px';
+    booster.style.borderRadius = '50%';
+    booster.style.backgroundColor = 'red';
+    booster.style.zIndex = '1';
+    booster.style.display = 'block';
+    booster.style.position = 'absolute';
+    // booster.style.transition = 'all 1.5s ease-in-out';
+    booster.style.left = Math.floor(Math.random() * 1800) + 'px';
+    booster.style.top = Math.floor(Math.random() * 1000) + 'px';
+    document.body.appendChild(booster);
 
+    booster.addEventListener('click', function () {
+        clearInterval(boosterInterval);
+        booster.remove();
+        createBooster();
+    });
+
+    let boosterInterval = setInterval(moveBooster, 2000);
+
+}
+
+function createKonpeito() {
+
+    const konpeito = document.createElement('div');
+    konpeito.id = 'konpeito';
+    konpeito.style.width = '50px';
+    konpeito.style.height = '50px';
+    konpeito.style.borderRadius = '50%';
+    konpeito.style.backgroundColor = 'pink';
+    konpeito.style.zIndex = '1';
+    konpeito.style.display = 'block';
+    konpeito.style.position = 'absolute';
+    konpeito.style.left = '50%';
+    konpeito.style.top = '1';
+    document.body.appendChild(konpeito);
+
+    setInterval(moveKonpeito, 2000)
+}
 
 function createpawPrint() {
     const mouseX = event.clientX - 60;
@@ -150,15 +290,13 @@ function createpawPrint() {
 
 const timerInterval = setInterval(() => {
     currentSecond++;
-    displayTimer();
+    //displayTimer();
 
     if (currentSecond === 5) {
         clearInterval(timerInterval);
-        let arm = document.getElementById('catArm');
-        arm.style.backgroundColor = 'green';
-        // alert('Timer abgelaufen!'); 
+        finishScreen();
     }
-}, 1000);
+}, 2000);
 
 document.addEventListener("click", function (event) {
     createpawPrint();
@@ -172,9 +310,14 @@ document.addEventListener("click", function (event) {
 
 
 
-
-//displayTimer();
-createFly(); //creates the first Fly
+console.log("game.js loaded");
+displayTimer();
+createFly();
+moveFly();
 setInterval(moveFly, 2000);
+createKonpeito();
+moveKonpeito;
 displayPoints();
-
+displayHealthPoints();
+createBooster();
+createGround();
