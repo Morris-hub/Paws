@@ -71,9 +71,15 @@
 
   <div id="menu">
     <button onclick="window.location.href='/start'"> Start</button>
-    <button onclick="window.location.href='/story'"> Donate</button>
+    <button onclick="openDonationPage()"> Donate</button>
     <button onclick="window.location.href='/settings'"> Settings</button>
   </div>
 </body>
+<script>
+  function openDonationPage() {
+    var donationURL = "https://ko-fi.com/cozygamestudio";
+    window.open(donationURL, '_blank');
+  }
+</script>
 
 </html>

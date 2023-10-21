@@ -3,6 +3,11 @@ let points = 0;
 let catArmPositionX = -100;
 let currentSecond = 0;
 let mouseX = 0;
+let random = Math.floor(Math.random() * 1000);//#endregion
+const pinkKonpeito = "url('images/pinkKonpeito.png')";
+const yellowKonpeito = "url('images/yellowKonpeito.png')";
+const blueKonpeito = "url('images/blueKonpeito.png')";
+const greenKonpeito = "url('images/greenKonpeito.png')";
 
 
 
@@ -164,39 +169,49 @@ function moveFly() {
     elementToChangeCursor.style.cursor = "pointer";
 }
 
-function moveKonpeito() {
-    const Konpeito = document.getElementById('konpeito');
-    const maxWidth = window.innerWidth - 100;
-    const newLeft = Math.floor(Math.random() * maxWidth) + 'px';
-    const newTop = '-100px'; // Startposition oberhalb des Bildschirms
+// function moveKonpeito() {
+//     const Konpeito = document.getElementById('konpeito');
+//     const maxWidth = window.innerWidth - 100;
+//     const maxHeight = window.innerHeight - 100;
+//     const newLeft = Math.floor(Math.random() * maxWidth) + 'px';
+//     const groundTop = maxHeight; // Obere Position des Bodens
 
-    Konpeito.style.left = newLeft;
-    Konpeito.style.top = newTop;
+//     Konpeito.style.left = newLeft;
+//     Konpeito.style.top = '-50px'; // Startposition oberhalb des Bildschirms
 
-    const animationDuration = 2000; // Dauer der Animation in Millisekunden
-    const animationFrames = 180; // Anzahl der Animationsschritte
-    const stepX = (parseInt(newLeft) - parseInt(Konpeito.style.left)) / animationFrames;
-    const stepY = (window.innerHeight + 100) / animationFrames; // Y-Schritt für das Herunterfallen
+//     const animationDuration = 6000; // Dauer der Animation in Millisekunden
+//     const animationFrames = 120; // Anzahl der Animationsschritte
+//     const stepX = (parseInt(newLeft) - parseInt(Konpeito.style.left)) / animationFrames;
+//     const stepY = (maxHeight + 100) / animationFrames; // Y-Schritt für das Herunterfallen
 
-    let frameCount = 0;
-    const animate = () => {
-        frameCount++;
-        Konpeito.style.left = (parseInt(Konpeito.style.left) + stepX) + 'px';
-        Konpeito.style.top = (parseInt(Konpeito.style.top) + stepY) + 'px';
+//     let frameCount = 0;
+//     const animate = () => {
+//         frameCount++;
+//         Konpeito.style.left = (parseInt(Konpeito.style.left) + stepX) + 'px';
+//         Konpeito.style.top = (parseInt(Konpeito.style.top) + stepY) + 'px';
 
-        if (frameCount < animationFrames) {
-            requestAnimationFrame(animate);
-        }
-    };
-    Konpeito.addEventListener('click', function () {
-        playFlySound();
-        Konpeito.remove();
-        points--;
-        createKonpeito();
-    });
-    animate();
+//         // Kollisionserkennung: Wenn der Konpeito den Boden erreicht, anhalten
+//         if (parseInt(Konpeito.style.top) >= groundTop) {
+//             Konpeito.style.top = groundTop + 'px';
+//             Konpeito.style.borderRadius = '50%';
+//             Konpeito.style.backgroundColor = 'blau'; // Ändern Sie die Farbe nach dem Aufprall
+//             console.log('Konpeito ist auf dem Boden gelandet!');
+//             clearInterval(animateInterval);
+//         }
+//     };
+
+//     // Führe die Animation aus
+//     const animateInterval = setInterval(animate, animationDuration / animationFrames);
+// }
+
+// function moveKonpeito2() {
+
+// }
+function getRandomKonpeitoColor() {
+    const konpeitoColors = [pinkKonpeito, yellowKonpeito, blueKonpeito, greenKonpeito];
+    const randomIndex = Math.floor(Math.random() * konpeitoColors.length);
+    return konpeitoColors[randomIndex];
 }
-
 
 function playFlySound() {
     const flySound = document.getElementById('flySound');
@@ -254,21 +269,51 @@ function createBooster() {
 
 function createKonpeito() {
 
+
+    const maxWidth = window.innerWidth - 100;
+    const maxHeight = window.innerHeight - 100;
+    const newLeft = Math.floor(Math.random() * maxWidth) + 'px';
     const konpeito = document.createElement('div');
     konpeito.id = 'konpeito';
-    konpeito.style.width = '50px';
+    konpeito.style.width = '62px';
     konpeito.style.height = '50px';
-    konpeito.style.borderRadius = '50%';
-    konpeito.style.backgroundColor = 'pink';
+    konpeito.style.backgroundSize = "cover";
+    konpeito.style.backgroundRepeat = "no-repeat";
     konpeito.style.zIndex = '1';
+    konpeito.style.padding = '10px';
+    const randomColor = getRandomKonpeitoColor();
+
+    konpeito.style.backgroundImage = randomColor;
+
     konpeito.style.display = 'block';
     konpeito.style.position = 'absolute';
-    konpeito.style.left = '50%';
-    konpeito.style.top = '1';
+    konpeito.style.top = '-100px';
+    konpeito.style.left = newLeft;
+    console.log(random);
     document.body.appendChild(konpeito);
 
-    setInterval(moveKonpeito, 2000)
+    konpeito.addEventListener('click', function () {
+        konpeito.remove();
+        points++;
+        displayPoints(points);
+        clearInterval(Konpeitointerval);
+        createKonpeito();
+    });
+
+    let topPosition = -100;
+    let Konpeitointerval = setInterval(function () {
+        topPosition += 10; // 5px Schritte nach unten
+        konpeito.style.top = topPosition + 'px';
+
+        if (topPosition >= maxHeight) {
+            createKonpeito();
+            clearInterval(Konpeitointerval);
+            // konpeito.remove();
+            konpeito.removeEventListener('click');
+        }
+    }, 40); // 50ms Verzögerung für eine sanfte Bewegung
 }
+
 
 function createpawPrint() {
     const mouseX = event.clientX - 60;
@@ -290,9 +335,9 @@ function createpawPrint() {
 
 const timerInterval = setInterval(() => {
     currentSecond++;
-    //displayTimer();
+    displayTimer();
 
-    if (currentSecond === 5) {
+    if (currentSecond === 30) {
         clearInterval(timerInterval);
         finishScreen();
     }
@@ -310,14 +355,26 @@ document.addEventListener("click", function (event) {
 
 
 
+
+
 console.log("game.js loaded");
 displayTimer();
-createFly();
-moveFly();
-setInterval(moveFly, 2000);
+// createFly();
+// moveFly();
 createKonpeito();
-moveKonpeito;
+// moveKonpeito();
+stateMachine();
 displayPoints();
 displayHealthPoints();
-createBooster();
+// createBooster();
 createGround();
+
+
+// function stateMachine() {
+
+//     for (i = 0; i < 10; i++) {
+//         createKonpeito();
+//     }
+
+//     if{}
+// }
