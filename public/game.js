@@ -1,4 +1,3 @@
-
 let points = 0;
 let catArmPositionX = -100;
 let currentSecond = 0;
@@ -6,10 +5,12 @@ let mouseX = 0;
 let random = Math.floor(Math.random() * 1000);//#endregion
 const pinkKonpeito = "url('images/pinkKonpeito.png')";
 const yellowKonpeito = "url('images/yellowKonpeito.png')";
-const blueKonpeito = "url('images/blueKonpeito.png')";
+const whiteKonpeito = "url('images/whiteKonpeito.png')";
 const greenKonpeito = "url('images/greenKonpeito.png')";
 
+function endGame() {
 
+}
 
 function createCatArm() {
 
@@ -207,8 +208,18 @@ function moveFly() {
 // function moveKonpeito2() {
 
 // }
+
+function background() {
+    const background = document.body;
+    background.style.backgroundImage = "url('images/woodbackground.png')";
+    document.body.appendChild(background);
+
+
+
+}
+
 function getRandomKonpeitoColor() {
-    const konpeitoColors = [pinkKonpeito, yellowKonpeito, blueKonpeito, greenKonpeito];
+    const konpeitoColors = [pinkKonpeito, yellowKonpeito, whiteKonpeito, greenKonpeito];
     const randomIndex = Math.floor(Math.random() * konpeitoColors.length);
     return konpeitoColors[randomIndex];
 }
@@ -268,7 +279,7 @@ function createBooster() {
 }
 
 function createKonpeito() {
-
+    countKonpeitos();
 
     const maxWidth = window.innerWidth - 100;
     const maxHeight = window.innerHeight - 100;
@@ -276,7 +287,7 @@ function createKonpeito() {
     const konpeito = document.createElement('div');
     konpeito.id = 'konpeito';
     konpeito.style.width = '62px';
-    konpeito.style.height = '50px';
+    konpeito.style.height = '62px';
     konpeito.style.backgroundSize = "cover";
     konpeito.style.backgroundRepeat = "no-repeat";
     konpeito.style.zIndex = '1';
@@ -295,6 +306,8 @@ function createKonpeito() {
     konpeito.addEventListener('click', function () {
         konpeito.remove();
         points++;
+        playFlySound();
+
         displayPoints(points);
         clearInterval(Konpeitointerval);
         createKonpeito();
@@ -353,6 +366,11 @@ document.addEventListener("click", function (event) {
 
 });
 
+function countKonpeitos() {
+    const konpeitos = document.querySelectorAll('#konpeito');
+    console.log(konpeitos.length);
+    return konpeitos.length;
+}
 
 
 
@@ -363,7 +381,6 @@ displayTimer();
 // moveFly();
 createKonpeito();
 // moveKonpeito();
-stateMachine();
 displayPoints();
 displayHealthPoints();
 // createBooster();
