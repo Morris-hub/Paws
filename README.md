@@ -15,7 +15,7 @@ implementation("androidx.room:room-runtime:$room_version")
 annotationProcessor("androidx.room:room-compiler:$room_version")
 ```
 
-## Enitiy erstellen | Users.kt
+## Enitiy erstellen | Todos.kt
 
 Entitäten werden über Datenklassen definiert. Dazu wird `@Entity` verwendet, um die Klasse als Zeile in der Datenbank zu erstellen. Mit `@PrimaryKey` wird der Primärschlüssel markiert. Es ist empfehlenswert, `autoGenerate` auf true zu setzen, um IDs automatisch zu generieren.
 
@@ -31,7 +31,7 @@ import java.util.Date
 Code Snippet:
 ```kotlin
 @Entity
-data class User{
+data class Todo{
   @PrimaryKey(autoGenerate=true)
   var id: Int,
   var name: String,
@@ -39,7 +39,7 @@ data class User{
 }
 ```
 
-## DAO erstellen | UserDao.kt
+## DAO erstellen | TodoDao.kt
 
 Für die Datenbank abfragen über Room können vorgefertigte oder selsbst Erstellte SQL-Abfragen verwendetwerden. 
 Room selbst bietet auch fertige Abfragen wie das Löschen, Erstellen und Aktualisieren von Daten.
@@ -61,32 +61,32 @@ import com.example.projectname.Todo
 Code Snippet:
 ```kotlin
 @Dao
-interface UserDao {
+interface TodoDao {
 
-    @Query("SELECT * FROM User")
-    fun getAllUser(): LiveData<List<User>>
+    @Query("SELECT * FROM Todo")
+    fun getAllTodo(): LiveData<List<Todo>>
 
     // Diese Methode gibt einen Benutzer mit der angegebenen ID zurück.
-    @Query("SELECT * FROM User WHERE id = :userId")
-    fun getUserById(userId: Int): LiveData<User>
+    @Query("SELECT * FROM Todo WHERE id = :todoId")
+    fun getTodoById(todoId: Int): LiveData<Todo>
 
     @Insert
-    fun addUser(user: User)
+    fun addTodo(todo: Todo)
 
     @Delete
-    fun deleteUser(id: Int)
+    fun deleteTodo(id: Int)
 
     @Update
-    fun updateUser(user: User)
+    fun updateTodo(todo: Todo)
 }
 ```
 
-## Datenbank definieren | UserDatabase.kt
+## Datenbank definieren | TodoDatabase.kt
 
 
 Im folgenden Beispiel wird die Datenbank definiert mit der Annotation @Database.
-`[User::class]` zeigt an das die Entität User eine Entität ist die in der Datenbank verwenden wird.
-Mit der Variable userDao werden die einzelnen Datenbank Abfragen über den punkt operator zur Verfügung gestellt.
+`[Todo::class]` zeigt an das die Entität Todo eine Entität ist die in der Datenbank verwenden wird.
+Mit der Variable todoDao werden die einzelnen Datenbank Abfragen über den punkt operator zur Verfügung gestellt.
 
 
 Imports:
@@ -94,15 +94,15 @@ Imports:
 ```kotlin
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.projectname.UserDao
-import com.example.projectname.User
+import com.example.projectname.TodoDao
+import com.example.projectname.Todo
 ````
 
 Code Snippet:
 ```kotlin
-@Database(version = 1, entities = [User::class])
-abstract class ToDoListDatabase  : RoomDatabase() {
-    abstract val userDao : UserDao
+@Database(version = 1, entities = [Todo::class])
+abstract class TodoListDatabase  : RoomDatabase() {
+    abstract val todoDao : TodoDao
 }
 
 ```
@@ -111,7 +111,7 @@ abstract class ToDoListDatabase  : RoomDatabase() {
 
 
 ```kotlin
-In der `MainActivity` wird über Lazy Initialization die Room-Datenbank `db` erstellt. Dies geschieht mit `Room.databaseBuilder`, wobei der `applicationContext`, die `UserDatabase`-Klasse und der Name der Datenbank angegeben werden. Damit wird sichergestellt, dass die Datenbank erstellt wird, wenn sie benötigt wird, was effizientere Ressourcennutzung ermöglicht.
+In der `MainActivity` wird über Lazy Initialization die Room-Datenbank `db` erstellt. Dies geschieht mit `Room.databaseBuilder`, wobei der `applicationContext`, die `TodoDatabase`-Klasse und der Name der Datenbank angegeben werden. Damit wird sichergestellt, dass die Datenbank erstellt wird, wenn sie benötigt wird, was effizientere Ressourcennutzung ermöglicht.
 ```
 
 Code Snippet:
@@ -120,7 +120,7 @@ class MainActivity : ComponentActivity() {
     private val db by lazy {
         Room.databaseBuilder(
             applicationContext,
-            UserDatabase::class.java,
+            TodoDatabase::class.java,
             "database.db"
         ).build()
 
