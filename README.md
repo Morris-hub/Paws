@@ -15,24 +15,40 @@ implementation("androidx.room:room-runtime:$room_version")
 annotationProcessor("androidx.room:room-compiler:$room_version")
 ```
 
-Entities definieren und Todo.kt erstellen
-Repräsentiert das erstellte Objekt.
+## Enitiy erstellen | Users.kt
 
-## Enitiy erstellen | Todo.kt
+Entitäten werden über Datenklassen definiert. Dazu wird `@Entity` verwendet, um die Klasse als Zeile in der Datenbank zu erstellen. Mit `@PrimaryKey` wird der Primärschlüssel markiert. Es ist empfehlenswert, `autoGenerate` auf true zu setzen, um IDs automatisch zu generieren.
+
+
+Imports:
 
 ```kotlin
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.util.Date
+````
+
+Code Snippet:
+```kotlin
 @Entity
-data class Todo{
+data class User{
   @PrimaryKey(autoGenerate=true)
   var id: Int,
-  var title:String,
+  var name: String,
   var createdAt: Date
 }
-'''
+```
 
-## DAO erstellen | TodoDao.kt
+## DAO erstellen | UserDao.kt
 
-Room verwendet SQL-Abfragen, die mit `@Query` definiert werden. Diese SQL-Abfragen spezifizieren die Datenbankabfragen für die Entity in der Datenbank.
+Für die Datenbank abfragen über Room können vorgefertigte oder selsbst Erstellte SQL-Abfragen verwendetwerden. 
+Room selbst bietet auch fertige Abfragen wie das Löschen, Erstellen und Aktualisieren von Daten.
+Diese werden mit den Annotationen `@Delete`, `@Insert`, `@Update` und der übergabe der Entity estellt.
+
+Das Abfrage einer kompletten Tabelle als auch bestimmter Zeilen wird mit SQL erstellt. 
+Zum erstellen einer eigenen Abfrage wird die Annotation `@Query()` verwendet. In den Klammern wird dann die gewünschte SQL-Abfrage als String eingesetzt.
+
+Anmerkung: Es könne auch Parameter an die Abfrage übergeben werden.
 
 Imports:
 ```kotlin
@@ -43,62 +59,72 @@ import com.example.projectname.Todo
 ```
 
 Code Snippet:
-
 ```kotlin
 @Dao
-interface TodoDao {
-    @Query("SELECT * FROM TODO")
-    fun getAllTodo(): LiveData<List<Todo>>
+interface UserDao {
+
+    @Query("SELECT * FROM User")
+    fun getAllUser(): LiveData<List<User>>
+
+    // Diese Methode gibt einen Benutzer mit der angegebenen ID zurück.
+    @Query("SELECT * FROM User WHERE id = :userId")
+    fun getUserById(userId: Int): LiveData<User>
 
     @Insert
-    fun addTodo(todo: Todo)
+    fun addUser(user: User)
 
-    @delete
-    fun deleteTodo(id: Int)
+    @Delete
+    fun deleteUser(id: Int)
+
+    @Update
+    fun updateUser(user: User)
 }
 ```
 
-## Zugriff auf Datenbank erstellen erstellen | TodoDatabase.kt
+## Datenbank definieren | UserDatabase.kt
+
+
+Im folgenden Beispiel wird die Datenbank definiert mit der Annotation @Database.
+`[User::class]` zeigt an das die Entität User eine Entität ist die in der Datenbank verwenden wird.
+Mit der Variable userDao werden die einzelnen Datenbank Abfragen über den punkt operator zur Verfügung gestellt.
+
 
 Imports:
+
 ```kotlin
 import androidx.room.Database
-import com.example.projectname.Todo
+import androidx.room.RoomDatabase
+import com.example.projectname.UserDao
+import com.example.projectname.User
+````
+
+Code Snippet:
+```kotlin
+@Database(version = 1, entities = [User::class])
+abstract class ToDoListDatabase  : RoomDatabase() {
+    abstract val userDao : UserDao
+}
+
+```
+
+## Datenbank initalisieren | MainActivity.kt
+
+
+```kotlin
+In der `MainActivity` wird über Lazy Initialization die Room-Datenbank `db` erstellt. Dies geschieht mit `Room.databaseBuilder`, wobei der `applicationContext`, die `UserDatabase`-Klasse und der Name der Datenbank angegeben werden. Damit wird sichergestellt, dass die Datenbank erstellt wird, wenn sie benötigt wird, was effizientere Ressourcennutzung ermöglicht.
 ```
 
 Code Snippet:
 ```kotlin
-@Database(entities = [Todo::class], version = 1)
-abstract class TodoDatabase {
-    companion object {
-        const val NAME = "Todo_DB"
+class MainActivity : ComponentActivity() {
+    private val db by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            UserDatabase::class.java,
+            "database.db"
+        ).build()
+
     }
-    
-    abstract fun getTodoDAO(): TodoDao
 }
 ```
-
-## Datenbank initialisieren | MainApplication.kt
-
-Anmerkung:Kann in einem eigenen File oder der MainActivity.kt erstellt werden
-
-Mit folgendem Code kann die Datenbank initalisiert werden
-```
-class MainApplication:Application(){
-    
-     companion object {
-lateinit var todoDatabase:TodoDatabase {
-     } 
-
-    override fun onCreate() {
-           super.onCreate()
-           Room.databaseBuilder(
-           applicationContext,
-          TodoDatabase::classe.java,
-          TodoDatabase.NAME
-).build
-     }
-}
-```
-
 
