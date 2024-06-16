@@ -68,7 +68,7 @@ interface TodoDao {
 
     // Diese Methode gibt einen Benutzer mit der angegebenen ID zurück.
     @Query("SELECT * FROM Todo WHERE id = :todoId")
-    fun getTodoById(todoId: Int): LiveData<Todo>
+    fun getTodoById(todoId: String): LiveData<Todo>
 
     @Insert
     fun addTodo(todo: Todo)
